@@ -30,9 +30,7 @@
 
 1.  Creamos el App Service Plan: Una buena práctica es separar la plantilla de los parámetros que necesitamos. Entonces:
 
-    1.  Creamos una carpeta llamada `01-app-service-plan` para los archivos del App Service Plan:
-
-    2.  En la carpeta `01-app-service-plan` creamos los siguientes archivos:
+    1.  Creamos una carpeta llamada `01-app-service-plan` y en la misma creamos los siguientes archivos:
 
         `parameters.json`:
 
@@ -122,7 +120,7 @@
         }
         ```
 
-    3.  Conexión a Azure: Ejecutamos el siguiente comando en PowerShell
+    2.  Conexión a Azure: Ejecutamos el siguiente comando en PowerShell
 
         ```powershell
         Connect-AzAccount
@@ -131,25 +129,25 @@
         Luego se abrirá una ventana del navegador solicitando la cuenta con la que iniciaremos sesión
         ![Inicio de sesión](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/autorizacion-cuenta-azure.png)
 
-    4.  Obtenemos el ID de suscripción:
+    3.  Obtenemos el ID de suscripción:
 
         ```powershell
         Get-AzSubscription
         ```
 
-    5.  Seleccionamos la suscripción que vamos a utilizar:
+    4.  Seleccionamos la suscripción que vamos a utilizar:
 
         ```powershell
         Select-AzSubscription -SubscriptionId "111efc23-4987-4881-97db-aad51bb887ed"
         ```
 
-    6.  Obtenemos el grupo de recursos:
+    5.  Obtenemos el grupo de recursos:
 
         ```powershell
         Get-AzResourceGroup
         ```
 
-    7.  Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
+    6.  Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
 
         ```powershell
         New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\01-app-service-plan\template.json -TemplateParameterFile .\01-app-service-plan\parameters.json
@@ -185,9 +183,7 @@
 
 2.  Dominio personalizado:
 
-    1. Creamos una carpeta llamada `02-dominio-personalizado` para los archivos de los App Services
-
-    2. En la carpeta `02-dominio-personalizado` creamos los siguientes archivos:
+    1. Creamos una carpeta llamada `02-dominio-personalizado` y en la misma creamos los siguientes archivos:
        `template.json`:
 
        ```json
@@ -229,7 +225,7 @@
        }
        ```
 
-    3. Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
+    2. Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
 
        ```powershell
        New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\02-dominio-personalizado\template.json -TemplateParameterFile .\02-dominio-personalizado\parameters.json
@@ -269,9 +265,7 @@
 
        ![detalle-access-token](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/detalle-access-token.png)
 
-    2. Creamos una carpeta llamada `03-app-services` para los archivos de los App Services
-
-    3. En la carpeta `03-app-services` creamos los siguientes archivos:
+    2. Creamos una carpeta llamada `03-app-services` y en la misma creamos los siguientes archivos:
 
        `template.json`:
 
@@ -431,14 +425,14 @@
        }
        ```
 
-    4. Se ejecutan los siguientes comandos que utilizarán los archivos creados anteriormente:
+    3. Se ejecutan los siguientes comandos que utilizarán los archivos creados anteriormente:
 
        ```powershell
        New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\03-app-services\template.json -TemplateParameterFile .\03-app-services\RugelWebApp1.json
        New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\03-app-services\template.json -TemplateParameterFile .\03-app-services\RugelWebApp2.json
        ```
 
-    5. Si los recursos fueron creados se verán dos resultados como estos:
+    4. Si los recursos fueron creados se verán dos resultados como estos:
 
        ```
         DeploymentName          : template
@@ -492,10 +486,10 @@
         DeploymentDebugLogLevel :
        ```
 
-    6. Buscamos en el Portal de Azure los recursos recientemente creados.
+    5. Buscamos en el Portal de Azure los recursos recientemente creados.
        ![busqueda-webapps](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/busqueda-webapps.png)
 
-    7. Al abrirlos obtenemos la URL que se le asignó al servicio
+    6. Al abrirlos obtenemos la URL que se le asignó al servicio
 
        ![RugelWebApp1](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/RugelWebApp1.png)
 
