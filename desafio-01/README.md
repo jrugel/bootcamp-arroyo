@@ -235,7 +235,7 @@
 
        Si el comando es satisfactorio mostrará un mensaje como este:
 
-       ```powershell
+       ```
         DeploymentName          : template
         ResourceGroupName       : Bootcamp
         ProvisioningState       : Succeeded
