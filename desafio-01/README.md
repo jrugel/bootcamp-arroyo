@@ -32,7 +32,9 @@
 
     1.  Creamos una carpeta llamada `01-app-service-plan` para los archivos del App Service Plan:
 
-    2.  En la carpeta `01-app-service-plan` creamos un archivo de parámetros con el nombre `parameters.json`:
+    2.  En la carpeta `01-app-service-plan` creamos los siguientes archivos:
+
+        `parameters.json`:
 
         ```json
         {
@@ -64,7 +66,7 @@
         }
         ```
 
-    3.  En la carpeta `01-app-service-plan` creamos un archivo que contendrá la definición de la plantilla con el nombre `template.json`:
+        `template.json`:
 
         ```json
         {
@@ -120,7 +122,7 @@
         }
         ```
 
-    4.  Conexión a Azure: Ejecutamos el siguiente comando en PowerShell
+    3.  Conexión a Azure: Ejecutamos el siguiente comando en PowerShell
 
         ```powershell
         Connect-AzAccount
@@ -129,25 +131,25 @@
         Luego se abrirá una ventana del navegador solicitando la cuenta con la que iniciaremos sesión
         ![Inicio de sesión](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/autorizacion-cuenta-azure.png)
 
-    5.  Obtenemos el ID de suscripción:
+    4.  Obtenemos el ID de suscripción:
 
         ```powershell
         Get-AzSubscription
         ```
 
-    6.  Seleccionamos la suscripción que vamos a utilizar:
+    5.  Seleccionamos la suscripción que vamos a utilizar:
 
         ```powershell
         Select-AzSubscription -SubscriptionId "111efc23-4987-4881-97db-aad51bb887ed"
         ```
 
-    7.  Obtenemos el grupo de recursos:
+    6.  Obtenemos el grupo de recursos:
 
         ```powershell
         Get-AzResourceGroup
         ```
 
-    8.  Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
+    7.  Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
 
         ```powershell
         New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\01-app-service-plan\template.json -TemplateParameterFile .\01-app-service-plan\parameters.json
