@@ -5,6 +5,9 @@
     "name": {
       "value": "RugelWebApp2"
     },
+    "domainName": {
+      "value": "rugelwebapp2.azure.javierrugel.com"
+    },
     "location": {
       "value": "centralus"
     },

@@ -13,12 +13,22 @@
 >
 > https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans
 
-## Implementación del deasfío
+## Investigación sobre el deasfío
 
 1.  Empezamos por entender el pedido recibido:
     ![Investigación rápida](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/definicion-app-service-plan.png)
 
-2.  Creamos el App Service Plan: Una buena práctica es separar la plantilla de los parámetros que necesitamos. Entonces:
+2.  Elaboramos una lista de las tareas a realizar:
+
+    1. Desplegar un App Service Plan gratuito
+    2. Desplegar dos App Services gratuitos vinculados a este App Service Plan
+    3. Como tarea extra los dos App Services tendrán el dominio personalizado
+
+       > **OBSERVACIÓN:** Aunque los parámetros sean los correctos, los App Services gratuitos **_no soportan_** dominios personalizados y por tanto se asignarán dominios aleatorios.
+
+## Implementación del deasfío
+
+1.  Creamos el App Service Plan: Una buena práctica es separar la plantilla de los parámetros que necesitamos. Entonces:
 
     1.  Creamos una carpeta llamada `01-app-service-plan` para los archivos del App Service Plan:
 
@@ -171,6 +181,76 @@
 
         ![App Service Plan creado](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/app-service-plan-creado.png)
 
+2.  Dominio personalizado:
+
+    1. Creamos una carpeta llamada `02-dominio-personalizado` para los archivos de los App Services
+
+    2. En la carpeta `02-dominio-personalizado` creamos los siguientes archivos:
+       `template.json`:
+
+       ```json
+       {
+         "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+         "contentVersion": "1.0.0.0",
+         "parameters": {
+           "dnsZonesName": {
+             "type": "string"
+           }
+         },
+         "resources": [
+           {
+             "apiVersion": "2018-05-01",
+             "type": "Microsoft.Network/dnsZones",
+             "name": "[parameters('dnsZonesName')]",
+             "location": "global",
+             "dependsOn": [],
+             "tags": {
+               "bootcamp": ""
+             },
+             "properties": {}
+           }
+         ]
+       }
+       ```
+
+       `parameters.json`:
+
+       ```json
+       {
+         "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+         "contentVersion": "1.0.0.0",
+         "parameters": {
+           "dnsZonesName": {
+             "value": "azure.javierrugel.com"
+           }
+         }
+       }
+       ```
+
+    3. Se ejecuta el siguiente comando que utilizará los archivos creados anteriormente:
+
+       ```powershell
+       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\02-dominio-personalizado\template.json -TemplateParameterFile .\02-dominio-personalizado\parameters.json
+       ```
+
+       Si el comando es satisfactorio mostrará un mensaje como este:
+
+       ```powershell
+        DeploymentName          : template
+        ResourceGroupName       : Bootcamp
+        ProvisioningState       : Succeeded
+        Timestamp               : 12/4/2023 19:24:27
+        Mode                    : Incremental
+        TemplateLink            :
+        Parameters              :
+                                Name             Type                       Value
+                                ===============  =========================  ==========
+                                dnsZonesName     String                     "azure.javierrugel.com"
+
+        Outputs                 :
+        DeploymentDebugLogLevel :
+       ```
+
 3.  Aplicaciones Web:
 
     Para este ejemplo voy a crear 2 WebApp con Next.js que previamente resguardaré en mi repositorio GitHub.
@@ -187,9 +267,9 @@
 
        ![detalle-access-token](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/detalle-access-token.png)
 
-    2. Creamos una carpeta llamada `02-app-services` para los archivos de los App Services
+    2. Creamos una carpeta llamada `03-app-services` para los archivos de los App Services
 
-    3. En la carpeta `02-app-services` creamos los siguientes archivos:
+    3. En la carpeta `03-app-services` creamos los siguientes archivos:
 
        `template.json`:
 
@@ -199,6 +279,9 @@
          "contentVersion": "1.0.0.0",
          "parameters": {
            "name": {
+             "type": "string"
+           },
+           "domainName": {
              "type": "string"
            },
            "location": {
@@ -239,6 +322,7 @@
                "bootcamp": ""
              },
              "properties": {
+               "domainName": "[parameters('domainName')]",
                "repositoryUrl": "[parameters('repositoryUrl')]",
                "branch": "[parameters('branch')]",
                "repositoryToken": "[parameters('repositoryToken')]",
@@ -266,6 +350,9 @@
          "parameters": {
            "name": {
              "value": "RugelWebApp1"
+           },
+           "domainName": {
+             "value": "rugelwebapp1.azure.javierrugel.com"
            },
            "location": {
              "value": "centralus"
@@ -308,6 +395,9 @@
            "name": {
              "value": "RugelWebApp2"
            },
+           "domainName": {
+             "value": "rugelwebapp2.azure.javierrugel.com"
+           },
            "location": {
              "value": "centralus"
            },
@@ -339,11 +429,11 @@
        }
        ```
 
-    4. Se ejecuta los siguientes comandos que utilizarán los archivos creados anteriormente:
+    4. Se ejecutan los siguientes comandos que utilizarán los archivos creados anteriormente:
 
        ```powershell
-       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\02-app-services\template.json -TemplateParameterFile .\02-app-services\RugelWebApp1.json
-       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\02-app-services\template.json -TemplateParameterFile .\02-app-services\RugelWebApp2.json
+       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\03-app-services\template.json -TemplateParameterFile .\03-app-services\RugelWebApp1.json
+       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\03-app-services\template.json -TemplateParameterFile .\03-app-services\RugelWebApp2.json
        ```
 
     5. Si los recursos fueron creados se verán dos resultados como estos:
@@ -352,13 +442,14 @@
         DeploymentName          : template
         ResourceGroupName       : Bootcamp
         ProvisioningState       : Succeeded
-        Timestamp               : 12/4/2023 18:29:13
+        Timestamp               : 12/4/2023 20:08:11
         Mode                    : Incremental
         TemplateLink            :
         Parameters              :
                                 Name                   Type                       Value
                                 =====================  =========================  ==========
                                 name                   String                     "RugelWebApp1"
+                                domainName             String                     "rugelwebapp1.azure.javierrugel.com"
                                 location               String                     "centralus"
                                 sku                    String                     "Free"
                                 skucode                String                     "Free"
@@ -377,13 +468,14 @@
         DeploymentName          : template
         ResourceGroupName       : Bootcamp
         ProvisioningState       : Succeeded
-        Timestamp               : 12/4/2023 18:49:55
+        Timestamp               : 12/4/2023 20:09:14
         Mode                    : Incremental
         TemplateLink            :
         Parameters              :
                                 Name                   Type                       Value
                                 =====================  =========================  ==========
                                 name                   String                     "RugelWebApp2"
+                                domainName             String                     "rugelwebapp2.azure.javierrugel.com"
                                 location               String                     "centralus"
                                 sku                    String                     "Free"
                                 skucode                String                     "Free"
@@ -402,4 +494,7 @@
        ![busqueda-webapps](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/busqueda-webapps.png)
 
     7. Al abrirlos obtenemos la URL que se le asignó al servicio
-       ![busqueda-webapps](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/busqueda-webapps.png)
+
+       ![RugelWebApp1](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/RugelWebApp1.png)
+
+       ![RugelWebApp2](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/RugelWebApp2.png)

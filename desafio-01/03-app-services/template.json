@@ -5,6 +5,9 @@
         "name": {
             "type": "string"
         },
+        "domainName": {
+            "type": "string"
+        },
         "location": {
             "type": "string"
         },
@@ -43,6 +46,7 @@
                 "bootcamp": ""
             },
             "properties": {
+                "domainName": "[parameters('domainName')]",
                 "repositoryUrl": "[parameters('repositoryUrl')]",
                 "branch": "[parameters('branch')]",
                 "repositoryToken": "[parameters('repositoryToken')]",
