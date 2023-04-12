@@ -498,3 +498,9 @@
        ![RugelWebApp1](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/RugelWebApp1.png)
 
        ![RugelWebApp2](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/RugelWebApp2.png)
+
+       Las URL aleatorias generadas son:
+
+       [RugelWebApp1](https://purple-stone-098ac3b10.3.azurestaticapps.net)
+
+       [RugelWebApp2](https://witty-meadow-05e0f2610.3.azurestaticapps.net)
