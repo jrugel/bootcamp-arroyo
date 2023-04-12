@@ -13,6 +13,97 @@
 >
 > https://learn.microsoft.com/en-us/azure/app-service/overview-hosting-plans
 
-## Implementación del pedido:
+## Implementación del deasfío:
 
-A modo de tener algo que desplegar, creo una aplicación [Next.js](https://nextjs.org/docs/getting-started).
+1. Empezamos por entender el pedido recibido:
+   ![Investigación rápida](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/definicion-app-service-plan.png)
+
+2. Creamos el App Service Plan: Una buena práctica es separar la plantilla de los parámetros que necesitamos. Entonces:
+
+   1. Creamos un archivo de parámetros `parameters.json`:
+
+      ```json
+      {
+        "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+          "name": {
+            "value": "GranjitaBootcamp"
+          },
+          "location": {
+            "value": "East US"
+          },
+          "numberOfWorkers": {
+            "value": "1"
+          },
+          "sku": {
+            "value": "Free"
+          },
+          "skuCode": {
+            "value": "F1"
+          },
+          "workerSize": {
+            "value": "0"
+          },
+          "workerSizeId": {
+            "value": "0"
+          }
+        }
+      }
+      ```
+
+   2. Creamos un archivo de parámetros `template.json`:
+
+      ```json
+      {
+        "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+        "contentVersion": "1.0.0.0",
+        "parameters": {
+          "name": {
+            "type": "string"
+          },
+          "location": {
+            "type": "string"
+          },
+          "sku": {
+            "type": "string"
+          },
+          "skucode": {
+            "type": "string"
+          },
+          "workerSize": {
+            "type": "string"
+          },
+          "workerSizeId": {
+            "type": "string"
+          },
+          "numberOfWorkers": {
+            "type": "string"
+          }
+        },
+        "resources": [
+          {
+            "apiVersion": "2018-11-01",
+            "name": "[parameters('name')]",
+            "type": "Microsoft.Web/serverfarms",
+            "location": "[parameters('location')]",
+            "kind": "linux",
+            "tags": {
+              "bootcamp": ""
+            },
+            "properties": {
+              "name": "[parameters('name')]",
+              "workerSize": "[parameters('workerSize')]",
+              "workerSizeId": "[parameters('workerSizeId')]",
+              "numberOfWorkers": "[parameters('numberOfWorkers')]",
+              "reserved": true,
+              "zoneRedundant": false
+            },
+            "sku": {
+              "Tier": "[parameters('sku')]",
+              "Name": "[parameters('skuCode')]"
+            }
+          }
+        ]
+      }
+      ```
