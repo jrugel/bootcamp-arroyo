@@ -501,6 +501,5 @@
 
        Las URL aleatorias generadas son:
 
-       [RugelWebApp1](https://purple-stone-098ac3b10.3.azurestaticapps.net)
-
-       [RugelWebApp2](https://witty-meadow-05e0f2610.3.azurestaticapps.net)
+       - [RugelWebApp1](https://purple-stone-098ac3b10.3.azurestaticapps.net)
+       - [RugelWebApp2](https://witty-meadow-05e0f2610.3.azurestaticapps.net)
