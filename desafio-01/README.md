@@ -166,5 +166,11 @@
         DeploymentDebugLogLevel :
         ```
 
+        Para verificar que se haya creado el App Service Plan correctamente
+        ![Inicio de sesión](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/autorizacion-cuenta-azure.png)
+
 3.  Ahora creamos los App Services:
+
     1.  Creamos una carpeta llamada `02-app-services` para los archivos de los App Services:
+
+    2.
