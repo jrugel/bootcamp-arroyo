@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "name": {
+      "value": "RugelWebApp2"
+    },
+    "location": {
+      "value": "centralus"
+    },
+    "sku": {
+      "value": "Free"
+    },
+    "skucode": {
+      "value": "Free"
+    },
+    "repositoryUrl": {
+      "value": "https://github.com/jrugel/RugelWebApp2"
+    },
+    "branch": {
+      "value": "main"
+    },
+    "repositoryToken": {
+      "value": "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"
+    },
+    "appLocation": {
+      "value": "/"
+    },
+    "apiLocation": {
+      "value": ""
+    },
+    "appArtifactLocation": {
+      "value": ".next"
+    }
+  }
+}

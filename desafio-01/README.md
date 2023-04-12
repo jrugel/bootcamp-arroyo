@@ -166,11 +166,240 @@
         DeploymentDebugLogLevel :
         ```
 
-        Para verificar que se haya creado el App Service Plan correctamente
-        ![Inicio de sesión](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/autorizacion-cuenta-azure.png)
+        Para verificar que se haya creado el App Service Plan correctamente buscamos el recurso en el portal de Azure y lo abrimos.
+        ![Búsqueda](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/busqueda-granjita.png)
 
-3.  Ahora creamos los App Services:
+        ![App Service Plan creado](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/app-service-plan-creado.png)
 
-    1.  Creamos una carpeta llamada `02-app-services` para los archivos de los App Services:
+3.  Aplicaciones Web:
 
-    2.
+    Para este ejemplo voy a crear 2 WebApp con Next.js que previamente resguardaré en mi repositorio GitHub.
+
+    ```bash
+    npx create-next-app@latest --js --src-dir --use-npm rugelwebapp1
+    npx create-next-app@latest --js --src-dir --use-npm rugelwebapp2
+    ```
+
+4.  App Services:
+
+    1. En GitHub creamos los repositorios y subimos las aplicaciones. Luego se debe crear un Access Token con permiso total sobre los repositorios en cuestión.
+       ![lista-access-token](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/lista-access-token.png)
+
+       ![detalle-access-token](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/detalle-access-token.png)
+
+    2. Creamos una carpeta llamada `02-app-services` para los archivos de los App Services
+
+    3. En la carpeta `02-app-services` creamos los siguientes archivos:
+
+       `template.json`:
+
+       ```json
+       {
+         "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+         "contentVersion": "1.0.0.0",
+         "parameters": {
+           "name": {
+             "type": "string"
+           },
+           "location": {
+             "type": "string"
+           },
+           "sku": {
+             "type": "string"
+           },
+           "skucode": {
+             "type": "string"
+           },
+           "repositoryUrl": {
+             "type": "string"
+           },
+           "branch": {
+             "type": "string"
+           },
+           "repositoryToken": {
+             "type": "securestring"
+           },
+           "appLocation": {
+             "type": "string"
+           },
+           "apiLocation": {
+             "type": "string"
+           },
+           "appArtifactLocation": {
+             "type": "string"
+           }
+         },
+         "resources": [
+           {
+             "apiVersion": "2021-01-01",
+             "name": "[parameters('name')]",
+             "type": "Microsoft.Web/staticSites",
+             "location": "[parameters('location')]",
+             "tags": {
+               "bootcamp": ""
+             },
+             "properties": {
+               "repositoryUrl": "[parameters('repositoryUrl')]",
+               "branch": "[parameters('branch')]",
+               "repositoryToken": "[parameters('repositoryToken')]",
+               "buildProperties": {
+                 "appLocation": "[parameters('appLocation')]",
+                 "apiLocation": "[parameters('apiLocation')]",
+                 "appArtifactLocation": "[parameters('appArtifactLocation')]"
+               }
+             },
+             "sku": {
+               "Tier": "[parameters('sku')]",
+               "Name": "[parameters('skuCode')]"
+             }
+           }
+         ]
+       }
+       ```
+
+       `RugelWebApp1.json`:
+
+       ```json
+       {
+         "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+         "contentVersion": "1.0.0.0",
+         "parameters": {
+           "name": {
+             "value": "RugelWebApp1"
+           },
+           "location": {
+             "value": "centralus"
+           },
+           "sku": {
+             "value": "Free"
+           },
+           "skucode": {
+             "value": "Free"
+           },
+           "repositoryUrl": {
+             "value": "https://github.com/jrugel/RugelWebApp1"
+           },
+           "branch": {
+             "value": "main"
+           },
+           "repositoryToken": {
+             "value": "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"
+           },
+           "appLocation": {
+             "value": "/"
+           },
+           "apiLocation": {
+             "value": ""
+           },
+           "appArtifactLocation": {
+             "value": ".next"
+           }
+         }
+       }
+       ```
+
+       `RugelWebApp2.json`:
+
+       ```json
+       {
+         "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+         "contentVersion": "1.0.0.0",
+         "parameters": {
+           "name": {
+             "value": "RugelWebApp2"
+           },
+           "location": {
+             "value": "centralus"
+           },
+           "sku": {
+             "value": "Free"
+           },
+           "skucode": {
+             "value": "Free"
+           },
+           "repositoryUrl": {
+             "value": "https://github.com/jrugel/RugelWebApp2"
+           },
+           "branch": {
+             "value": "main"
+           },
+           "repositoryToken": {
+             "value": "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"
+           },
+           "appLocation": {
+             "value": "/"
+           },
+           "apiLocation": {
+             "value": ""
+           },
+           "appArtifactLocation": {
+             "value": ".next"
+           }
+         }
+       }
+       ```
+
+    4. Se ejecuta los siguientes comandos que utilizarán los archivos creados anteriormente:
+
+       ```powershell
+       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\02-app-services\template.json -TemplateParameterFile .\02-app-services\RugelWebApp1.json
+       New-AzResourceGroupDeployment -ResourceGroupName Bootcamp -TemplateFile .\02-app-services\template.json -TemplateParameterFile .\02-app-services\RugelWebApp2.json
+       ```
+
+    5. Si los recursos fueron creados se verán dos resultados como estos:
+
+       ```
+        DeploymentName          : template
+        ResourceGroupName       : Bootcamp
+        ProvisioningState       : Succeeded
+        Timestamp               : 12/4/2023 18:29:13
+        Mode                    : Incremental
+        TemplateLink            :
+        Parameters              :
+                                Name                   Type                       Value
+                                =====================  =========================  ==========
+                                name                   String                     "RugelWebApp1"
+                                location               String                     "centralus"
+                                sku                    String                     "Free"
+                                skucode                String                     "Free"
+                                repositoryUrl          String                     "https://github.com/jrugel/RugelWebApp1"
+                                branch                 String                     "main"
+                                repositoryToken        SecureString               null
+                                appLocation            String                     "/"
+                                apiLocation            String                     ""
+                                appArtifactLocation    String                     ".next"
+
+        Outputs                 :
+        DeploymentDebugLogLevel :
+       ```
+
+       ```
+        DeploymentName          : template
+        ResourceGroupName       : Bootcamp
+        ProvisioningState       : Succeeded
+        Timestamp               : 12/4/2023 18:49:55
+        Mode                    : Incremental
+        TemplateLink            :
+        Parameters              :
+                                Name                   Type                       Value
+                                =====================  =========================  ==========
+                                name                   String                     "RugelWebApp2"
+                                location               String                     "centralus"
+                                sku                    String                     "Free"
+                                skucode                String                     "Free"
+                                repositoryUrl          String                     "https://github.com/jrugel/RugelWebApp2"
+                                branch                 String                     "main"
+                                repositoryToken        SecureString               null
+                                appLocation            String                     "/"
+                                apiLocation            String                     ""
+                                appArtifactLocation    String                     ".next"
+
+        Outputs                 :
+        DeploymentDebugLogLevel :
+       ```
+
+    6. Buscamos en el Portal de Azure los recursos recientemente creados.
+       ![busqueda-webapps](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/busqueda-webapps.png)
+
+    7. Al abrirlos obtenemos la URL que se le asignó al servicio
+       ![busqueda-webapps](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/busqueda-webapps.png)
