@@ -17,7 +17,6 @@
 
 1.  Empezamos por entender el pedido recibido:
     ![Investigación rápida](https://raw.githubusercontent.com/jrugel/bootcamp-arroyo/main/desafio-01/definicion-app-service-plan.png)
-    Entonces, al service plan le pondremos el nombre GranjitaBootcamp.
 
 2.  Creamos el App Service Plan: Una buena práctica es separar la plantilla de los parámetros que necesitamos. Entonces:
 
@@ -167,5 +166,5 @@
         DeploymentDebugLogLevel :
         ```
 
-3.  Creamos los App Services:
+3.  Ahora creamos los App Services:
     1.  Creamos una carpeta llamada `02-app-services` para los archivos de los App Services:
